@@ -1,7 +1,8 @@
-package com.example.waracleandroidtest
+package com.example.waracleandroidtest.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.waracleandroidtest.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
