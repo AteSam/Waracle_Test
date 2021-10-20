@@ -1,12 +1,14 @@
 package com.example.waracleandroidtest.data
 
+import com.example.waracleandroidtest.common.Results
 import com.example.waracleandroidtest.data.model.Cake
+import com.example.waracleandroidtest.domain.CakeRepository
 import retrofit2.HttpException
 import javax.inject.Inject
 
 class CakeRepositoryImpl @Inject constructor(
     private val cakeService: CakeService
-):CakeRepository {
+): CakeRepository {
 
     override suspend fun getCakes(): Results<List<Cake>> {
         val responseWrapper = cakeService.getCakeResponse()
