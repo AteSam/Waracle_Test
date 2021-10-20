@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.waracleandroidtest.viewmodel.CakeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -19,7 +20,8 @@ class CakeListFragment : Fragment() {
 
     private val cakeViewModel: CakeViewModel by viewModels()
 
-    private val adapter = CakeListAdapter()
+    private val adapter = CakeList
+    Adapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
