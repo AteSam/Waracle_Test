@@ -4,9 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import com.example.waracleandroidtest.adapter.CakeListAdapter
+import com.example.waracleandroidtest.databinding.FragmentCakeListBinding
+import com.example.waracleandroidtest.viewmodel.CakeEvent
 import com.example.waracleandroidtest.viewmodel.CakeViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 /**
  * A simple [Fragment] subclass.
@@ -20,12 +28,10 @@ class CakeListFragment : Fragment() {
 
     private val cakeViewModel: CakeViewModel by viewModels()
 
-    private val adapter = CakeList
-    Adapter()
+    private val adapter = CakeListAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
