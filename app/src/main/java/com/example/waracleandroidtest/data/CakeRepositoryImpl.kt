@@ -17,7 +17,10 @@ class CakeRepositoryImpl @Inject constructor(
                 val cakes = responseWrapper.body()?.map {
                     Cake(it.title, it.desc , it.image)
                 }
-                return Results.Ok(cakes.orEmpty())
+                return Results.Ok(cakes?.distinctBy { it.title }?.sortedBy { it.title }.orEmpty())
+            }
+            responseWrapper.code() == 404 -> {
+                return Results.Ok(emptyList<Cake>())
             }
             else -> throw  HttpException(responseWrapper)
         }
