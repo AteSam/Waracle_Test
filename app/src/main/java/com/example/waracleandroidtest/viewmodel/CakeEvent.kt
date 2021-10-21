@@ -6,4 +6,5 @@ sealed class CakeEvent {
     data class CakeLoaded(val data: List<Cake>) :CakeEvent()
     object CakeLoading :CakeEvent()
     object CakeError :CakeEvent()
+    data class CakeItemClickEvent(val cake:Cake):CakeEvent()
 }

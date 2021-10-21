@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.waracleandroidtest.databinding.CakeItemViewBinding
 import com.example.waracleandroidtest.domain.entity.Cake
 
-class CakeListAdapter : ListAdapter<Cake, CakeListAdapter.ItemsViewHolder>(DiffCallback)  {
+class CakeListAdapter(private val onItemClicked: (Cake) -> Unit) : ListAdapter<Cake, CakeListAdapter.ItemsViewHolder>(DiffCallback)  {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemsViewHolder = ItemsViewHolder(
         CakeItemViewBinding.inflate(
@@ -18,6 +18,9 @@ class CakeListAdapter : ListAdapter<Cake, CakeListAdapter.ItemsViewHolder>(DiffC
     override fun onBindViewHolder(holder: ItemsViewHolder, position: Int) {
         val cake = getItem(position)
         holder.bind(cake)
+        holder.itemView.setOnClickListener {
+            onItemClicked(cake)
+        }
     }
 
     companion object DiffCallback : DiffUtil.ItemCallback<Cake>() {
@@ -34,11 +37,11 @@ class CakeListAdapter : ListAdapter<Cake, CakeListAdapter.ItemsViewHolder>(DiffC
 
         fun bind(cake: Cake) {
             binding.cakeTitle.text = cake.title
-            binding.cakeDesc.text = cake.desc
             Glide.with(itemView.context)
                 .load(cake.image)
                 .into(binding.cakeImage)
         }
     }
+
 
 }

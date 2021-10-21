@@ -13,14 +13,19 @@ import javax.inject.Inject
 @HiltViewModel
 class CakeViewModel  @Inject constructor(
     private val cakeRepository: CakeRepository
-): ViewModel() {
+):ViewModel() {
 
     private val _cakeEvent = MutableStateFlow<CakeEvent>(CakeEvent.CakeLoading)
     val cakeEvent: StateFlow<CakeEvent>
         get() = _cakeEvent
 
+    fun submitAction(cakeItemAction: CakeItemAction) = when(cakeItemAction) {
+        is CakeItemAction.FetchCakes -> getCakes()
+        is CakeItemAction.CakeItemClicked -> _cakeEvent.value =
+            CakeEvent.CakeItemClickEvent(cakeItemAction.cake)
+    }
 
-    fun getCakes() {
+    private fun getCakes() {
         viewModelScope.launch {
             _cakeEvent.value = CakeEvent.CakeLoading
             when(val results = cakeRepository.getCakes()) {

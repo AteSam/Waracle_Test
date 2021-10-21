@@ -15,4 +15,11 @@ sealed class Results<out T> {
     data class Error<T>(
         val exception: Throwable
     ):Results<T>()
+
+
+}
+
+inline fun <reified T> Results<T>.valueOrThrow(): T = when(this) {
+    is Results.Ok<T> ->  this.data
+    is Results.Error<*> -> throw this.exception
 }

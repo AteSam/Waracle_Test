@@ -1,9 +1,8 @@
 package com.example.waracleandroidtest.view
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -11,7 +10,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.waracleandroidtest.adapter.CakeListAdapter
 import com.example.waracleandroidtest.databinding.FragmentCakeListBinding
+import com.example.waracleandroidtest.domain.entity.Cake
+import com.example.waracleandroidtest.R
 import com.example.waracleandroidtest.viewmodel.CakeEvent
+import com.example.waracleandroidtest.viewmodel.CakeItemAction
 import com.example.waracleandroidtest.viewmodel.CakeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -29,16 +31,13 @@ class CakeListFragment : Fragment() {
 
     private val cakeViewModel: CakeViewModel by viewModels()
 
-    private val adapter = CakeListAdapter()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private lateinit var adapter: CakeListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true);
         binding = FragmentCakeListBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
@@ -46,9 +45,12 @@ class CakeListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        adapter = CakeListAdapter {
+            cakeViewModel.submitAction(CakeItemAction.CakeItemClicked(it))
+        }
         cakeViewModel.cakeEvent.onEach { processEvent(it) }
             .launchIn(viewLifecycleOwner.lifecycleScope)
-        cakeViewModel.getCakes()
+        cakeViewModel.submitAction(CakeItemAction.FetchCakes)
     }
 
 
@@ -76,8 +78,38 @@ class CakeListFragment : Fragment() {
                 binding.cakesRecyclerView.adapter = adapter
                 adapter.submitList(event.data)
             }
+
+            is CakeEvent.CakeItemClickEvent -> showDialog(event.cake)
         }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.refreshmenu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.refresh -> {
+                cakeViewModel.submitAction(CakeItemAction.FetchCakes)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun showDialog(cake: Cake) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle(cake.title)
+        builder.setMessage(cake.desc)
+
+        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+
+        }
+
+        builder.show()
+    }
+
     companion object {
         /**
          * Use this factory method to create a new instance of

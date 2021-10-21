@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">WaracleAndroidTest</string>
     <string name="error">Error</string>
+    <string name="refresh">Refresh</string>
 </resources>
