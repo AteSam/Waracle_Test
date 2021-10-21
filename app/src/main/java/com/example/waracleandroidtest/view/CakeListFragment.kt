@@ -7,7 +7,8 @@ import android.view.ViewGroup
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.waracleandroidtest.adapter.CakeListAdapter
 import com.example.waracleandroidtest.databinding.FragmentCakeListBinding
 import com.example.waracleandroidtest.viewmodel.CakeEvent
@@ -53,7 +54,7 @@ class CakeListFragment : Fragment() {
 
     private fun processEvent(event: CakeEvent) {
         when (event) {
-            CakeEvent.CakeLoding -> {
+            CakeEvent.CakeLoading -> {
                 binding.apply {
                     progress.isVisible = true
                     error.isGone = true
